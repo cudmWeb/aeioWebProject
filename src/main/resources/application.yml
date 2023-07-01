@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/CDMDEV
+    username: root
+    password: password
+  jpa:
+    hibernate.ddl-auto: update
+    generate-ddl: true
+    show-sql: true
+
+    spring:
+      jackson:
+        property-naming-strategy: SNAKE_CASE
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.hibernate: INFO
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
