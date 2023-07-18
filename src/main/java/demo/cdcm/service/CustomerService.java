@@ -75,4 +75,8 @@ public class CustomerService {
     public List<CustomerData> getCustomers() {
         return customerDataRepository.findAll();
     }
+
+    public CustomerData searchCustomer(int id) {
+        return customerDataRepository.findById(id).get();
+    }
 }

@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "test_customer")
-public class TestCustomer implements Serializable {
+@Table(name = "TEST_TABLE")
+public class TestTable implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")

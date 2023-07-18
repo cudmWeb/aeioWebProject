@@ -4,8 +4,8 @@ import demo.cdcm.model.CustomerData;
 import demo.cdcm.request.CustomerDataRequest;
 import demo.cdcm.request.TestCustomerRequest;
 import demo.cdcm.service.CustomerService;
+import demo.cdcm.service.DropDownService;
 import demo.cdcm.service.TestCustomerService;
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +22,9 @@ public class CustomerDataController {
     private TestCustomerService testCustomerService;
     @Autowired
     private CustomerService customerService;
+    @Autowired
+    private DropDownService dropDownService;
     private static final Logger LOG = LoggerFactory.getLogger(CustomerDataController.class);
-
-    @GetMapping(value = "/create")
-    public String createGetCustomer(){
-        LOG.info("record created");
-        return "success";
-    }
 
     @PostMapping(value = "/create")
     public ResponseEntity<?> createCustomer(@RequestBody CustomerDataRequest request){
@@ -40,11 +36,17 @@ public class CustomerDataController {
 
     @GetMapping(value = "/getCustomers")
     public List<CustomerData> getCustomers(){
-        //LOG.info("Enter createTestCustomer");
-        //LOG.info("Record created");
-        //return ResponseEntity.ok().body(customerService.getCustomers());
         return customerService.getCustomers();
+    }
 
+    @GetMapping
+    public ResponseEntity<?> search(@RequestParam int id){
+        return ResponseEntity.ok(customerService.searchCustomer(id));
+    }
+
+    @GetMapping(value = "/drop_downs")
+    public ResponseEntity<?> getAllDropDowns(){
+        return ResponseEntity.ok(dropDownService.geAllDropDownData());
     }
 
     @PostMapping(value = "/test_create")
@@ -53,5 +55,10 @@ public class CustomerDataController {
         testCustomerService.createTestCustomer(request);
         LOG.info("Record created");
         return ResponseEntity.ok(testCustomerService.findAll());
+    }
+
+    @GetMapping(value = "/test")
+    public String testHealth(){
+        return "Application is up and running";
     }
 }
