@@ -7,10 +7,13 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -23,6 +26,9 @@ public class CustomerService {
 
     @Autowired
     private CustomerDataRepository customerDataRepository;
+
+    @Value("${customer.id.fetch}")
+    private String uniqueId;
 
     public void createCustomerData(CustomerDataRequest request){
 
@@ -46,7 +52,7 @@ public class CustomerService {
     @Transactional
     private void createCustomer(CustomerDataRequest request) {
         CustomerData data = new CustomerData();
-        data.setCustomerId(UUID.randomUUID().toString());
+        data.setCustomerId(getRandomUid(uniqueId));
         data.setNAICSCode(request.getNaicsCode());
 
         data.setCustomerAcronym(request.getCustomerAcronym());
@@ -70,6 +76,13 @@ public class CustomerService {
         data.setSalutation(request.getSalutation());
         customerDataRepository.save(data);
 
+    }
+
+    private String getRandomUid(String uniqueId) {
+
+        Random random = new SecureRandom();
+        int rand = random.nextInt();
+        return (uniqueId + "-" + String.valueOf(rand));
     }
 
     public List<CustomerData> getCustomers() {

@@ -9,7 +9,7 @@ import java.util.Date;
 public class CustomerData {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private int id;
     @Column(name = "CUSTOMER_ID")
@@ -56,7 +56,7 @@ public class CustomerData {
     private String nextOfKinTelephone;
     @Column(name = "NEXT_OF_KIN_EMAIL_ID")
     private String nextOfKinEmailId;
-    @Column(name = "NUMBER_OF_DEPENDENTS")
+    @Column(name = "NUMBER_OF_DEPENDANTS")
     private String numberOfDependants;
     @Column(name = "ACCOUNT_MANDATE_NAME")
     private String accountMandateName;

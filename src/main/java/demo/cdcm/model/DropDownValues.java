@@ -11,9 +11,9 @@ public class DropDownValues {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private Long id;
+    private int id;
     @Column(name = "DROP_DOWN_ID")
-    private Long dropDownId;
+    private int dropDownId;
     @Column(name = "DROP_DOWN_VALUE")
     private String dropDownValue;
     @Column(name = "DROP_DOWN_DESCRIPTION")
@@ -23,19 +23,19 @@ public class DropDownValues {
     @Column(name = "UPDATED_AT")
     private Timestamp updatedAt;
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public Long getDropDownId() {
+    public int getDropDownId() {
         return dropDownId;
     }
 
-    public void setDropDownId(Long dropDownId) {
+    public void setDropDownId(int dropDownId) {
         this.dropDownId = dropDownId;
     }
 

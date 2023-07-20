@@ -1,12 +1,18 @@
 spring:
-  profiles:
-    active: "dev"
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/CDMDEV
-    username: root
-    password: password
+    url: jdbc:mysql://cdmdev.cengda8pesbb.us-east-1.rds.amazonaws.com:3306/CDMDEV
+    username: CDMDB
+    password: Admin$123
   jpa:
-    hibernate.ddl-auto: update
-    generate-ddl: true
-    show-sql: true
+    hibernate:
+      ddl-auto: none
+      generate-ddl: false
+      show-sql: true
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+
+customer:
+  id:
+    fetch: CUS
