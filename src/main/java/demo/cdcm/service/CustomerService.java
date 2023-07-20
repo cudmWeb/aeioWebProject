@@ -87,6 +87,8 @@ public class CustomerService {
                 .map(user -> modelMapper.map(user, CustomerDataResponse.class))
                 .collect(Collectors.toList());
         return responseList;
+    }
+
     private String getRandomUid(String uniqueId) {
 
         Random random = new SecureRandom();
