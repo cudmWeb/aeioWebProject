@@ -16,3 +16,7 @@ h2:
 
 server:
   port: 8090
+
+customer:
+  id:
+    fetch: LOC
