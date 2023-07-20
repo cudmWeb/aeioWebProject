@@ -1,8 +1,8 @@
 package demo.cdcm.web.rest;
 
-import demo.cdcm.model.CustomerData;
 import demo.cdcm.request.CustomerDataRequest;
 import demo.cdcm.request.TestCustomerRequest;
+import demo.cdcm.response.CustomerDataResponse;
 import demo.cdcm.service.CustomerService;
 import demo.cdcm.service.DropDownService;
 import demo.cdcm.service.TestCustomerService;
@@ -35,7 +35,7 @@ public class CustomerDataController {
     }
 
     @GetMapping(value = "/getCustomers")
-    public List<CustomerData> getCustomers(){
+    public List<CustomerDataResponse> getCustomers(){
         return customerService.getCustomers();
     }
 
@@ -49,9 +49,14 @@ public class CustomerDataController {
         return ResponseEntity.ok(dropDownService.geAllDropDownData());
     }
 
+    @RequestMapping(value = "/{id}", method=RequestMethod.GET)
+    public CustomerDataResponse searchV1(@PathVariable("id") int id){
+       return customerService.searchCustomer(id);
+    }
+
     @PostMapping(value = "/test_create")
     public ResponseEntity<?> createTestCustomer(@RequestBody TestCustomerRequest request){
-        LOG.info("Enter createTestCustomer");
+
         testCustomerService.createTestCustomer(request);
         LOG.info("Record created");
         return ResponseEntity.ok(testCustomerService.findAll());
