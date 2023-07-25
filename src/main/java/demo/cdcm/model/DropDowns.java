@@ -2,12 +2,13 @@ package demo.cdcm.model;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Set;
 
 @Entity
 @Table(name = "DROP_DOWNS")
-public class DropDowns {
+public class DropDowns implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

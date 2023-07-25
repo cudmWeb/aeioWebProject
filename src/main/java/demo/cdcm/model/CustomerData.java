@@ -1,7 +1,10 @@
 package demo.cdcm.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Entity
@@ -152,6 +155,28 @@ public class CustomerData {
     private Long customerStatus;
     @Column(name = "DATE_LAST_MODIFIED")
     private Date dateLastModified;
+
+    @CreationTimestamp
+    @Column(name = "CREATED_AT")
+    private Timestamp createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "UPDATED_AT")
+    private Timestamp updatedAt;
+
+    @Column(name = "COMMENTS")
+    private String comments;
+
+    @Column(name = "STATUS")
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public int getId() {
         return id;
@@ -721,4 +746,27 @@ public class CustomerData {
         this.dateLastModified = dateLastModified;
     }
 
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
 }

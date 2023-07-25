@@ -1,5 +1,6 @@
 package demo.cdcm.web.rest;
 
+import demo.cdcm.dto.CustomerBaseDataDTO;
 import demo.cdcm.request.CustomerDataRequest;
 import demo.cdcm.request.TestCustomerRequest;
 import demo.cdcm.response.CustomerDataResponse;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/customer")
@@ -34,14 +36,25 @@ public class CustomerDataController {
         return ResponseEntity.ok().body("Successfully created customer");
     }
 
+
+    /**
+     *  Fetch only base data required to show records in UI
+     *
+     * @return List<CustomerBaseDataDTO>
+     */
     @GetMapping(value = "/getCustomers")
-    public List<CustomerDataResponse> getCustomers(){
+    public List<CustomerBaseDataDTO> getCustomers(){
         return customerService.getCustomers();
     }
 
-    @GetMapping
-    public ResponseEntity<?> search(@RequestParam int id){
-        return ResponseEntity.ok(customerService.searchCustomer(id));
+    /**
+     * Controller to return all customer details available
+     *
+     * @return List<CustomerDataResponse>
+     */
+    @GetMapping(value = "/getAllCustomers")
+    public List<CustomerDataResponse> getAllCustomers(){
+        return customerService.getAllCustomers();
     }
 
     @GetMapping(value = "/drop_downs")
@@ -49,9 +62,24 @@ public class CustomerDataController {
         return ResponseEntity.ok(dropDownService.geAllDropDownData());
     }
 
+    @GetMapping
+    public ResponseEntity<?> search(@RequestParam int id){
+        return ResponseEntity.ok(customerService.searchCustomer(id));
+    }
+
     @RequestMapping(value = "/{id}", method=RequestMethod.GET)
     public CustomerDataResponse searchV1(@PathVariable("id") int id){
-       return customerService.searchCustomer(id);
+        return customerService.searchCustomer(id);
+    }
+
+    @RequestMapping(value = "/searchByCustomerId", method=RequestMethod.POST)
+    public CustomerDataResponse searchByCustomerId(@RequestBody  Map<String, String> request){
+        return customerService.getCustomerDetails(request);
+    }
+
+    @RequestMapping(value = "/searchByCustomerId/{customerId}", method=RequestMethod.GET)
+    public CustomerDataResponse searchByCustomerIdV1(@PathVariable("customerId") String customerId){
+        return customerService.findByByCustomerId(customerId);
     }
 
     @PostMapping(value = "/test_create")
