@@ -4,6 +4,7 @@ import demo.cdcm.dto.CustomerBaseDataDTO;
 import demo.cdcm.model.CustomerData;
 import demo.cdcm.repository.CustomerDataRepository;
 import demo.cdcm.request.CustomerDataRequest;
+import demo.cdcm.request.UpdateStatusRequest;
 import demo.cdcm.response.CustomerDataResponse;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -33,9 +35,10 @@ public class CustomerService {
     @Value("${customer.id.fetch}")
     private String uniqueId;
 
-    public void createCustomerData(CustomerDataRequest request){
+    public void createCustomerData(CustomerDataRequest request) throws Exception{
         LOG.info("Enter createCustomerData");
-        createCustomer(request);
+        CustomerData data = new CustomerData();
+        customerDataRepository.save(createCustomer(request, data));
         LOG.info("request reached : {}", request.toString());
     }
 
@@ -45,38 +48,102 @@ public class CustomerService {
         return mm;
     }
 
-    @Transactional
-    private void createCustomer(CustomerDataRequest request) {
-        CustomerData data = new CustomerData();
-        data.setCustomerId(getRandomUid(uniqueId));
-        data.setNAICSCode(request.getNaicsCode());
+    public CustomerData createCustomer(CustomerDataRequest request, CustomerData data) {
 
-        data.setCustomerAcronym(request.getCustomerAcronym());
-        data.setCustomerName(request.getCustomerName());
-        data.setCustomerGender(request.getCustomerGender());
-        data.setCustomerTIN(request.getCustomerTIN());
         data.setAccountMandateIdNumber(request.getAccountMandateIdNumber());
         data.setAccountMandateIdType(request.getAccountMandateIdType());
         data.setAccountMandateName(request.getAccountMandateName());
         data.setAccountOfficer(request.getAccountOfficer());
+
+        if (null == request.getCustomerId()){
+            data.setCustomerId(getRandomUid(uniqueId));
+        }
+
         data.setCommAddress1(request.getCommAddress1());
+        data.setCommAddress2(request.getCommAddress2());
         data.setCommCountry(request.getCommCountry());
+        data.setCommResidenceType(request.getCommResidenceType());
         data.setCommVillage(request.getCommVillage());
+        data.setCustomerAcronym(request.getCustomerAcronym());
+        data.setCustomerGender(request.getCustomerGender());
+        data.setCustomerName(request.getCustomerName());
+        data.setCustomerOpenDate(request.getCustomerOpenDate());
         data.setCustomerStatus(request.getCustomerStatus());
+        data.setCustomerTIN(request.getCustomerTIN());
+
+        data.setDateLastModified(request.getDateLastModified());
         data.setDateOfBirth(request.getDateOfBirth());
+
+        data.setEconomicSubSectorCodeISIC(request.getEconomicSubSectorCodeISIC());
         data.setEducation(request.getEducation());
         data.setEmailId(request.getEmailId());
+        data.setEmpAddress1(request.getEmpAddress1());
+        data.setEmpAddress2(request.getEmpAddress2());
+        data.setEmpCountry(request.getEmpCountry());
+        data.setEmpVillage(request.getEmpVillage());
         data.setEmployeeID(request.getEmployeeID());
         data.setEmployerName(request.getEmployerName());
+        data.setFaxNumber1(request.getFaxNumber1());
+        data.setFaxNumber2(request.getFaxNumber2());
+        data.setForename1(request.getForename1());
+        data.setForename2(request.getForename2());
+        data.setGroupName(request.getGroupName());
+        data.setGroupNumber(request.getGroupNumber());
         data.setHealthInsuranceNumber(request.getHealthInsuranceNumber());
+        data.setHomeTelephone(request.getHomeTelephone());
+        data.setIncome(request.getIncome());
+        data.setIncomeFrequency(request.getIncomeFrequency());
+        data.setInternetBankingSubscription(request.getInternetBankingSubscription());
+        data.setLegalStatus(request.getLegalStatus());
+        data.setLocalGovtMember(request.getLocalGovtMember());
+        data.setMaritalStatus(request.getMaritalStatus());
+        data.setMobileBankingSubscription(request.getMobileBankingSubscription());
+        data.setNAICSCode(request.getNaicsCode());
+        data.setNationalIDNumber(request.getNationalIDNumber());
+        data.setNationalIDType(request.getNationalIDType());
+        data.setNationality(request.getNationality());
+        data.setNextOfKinEmailId(request.getNextOfKinEmailId());
+        data.setNextOfKinIdNumber(request.getNextOfKinIdNumber());
+        data.setNextOfKinIdType(request.getNextOfKinIDType());
+        data.setNextOfKinName(request.getNextOfKinName());
+        data.setNextOfKinTelephone(request.getNextOfKinTelephone());
+        data.setNumberOfDependants(request.getNumberOfDependants());
+        data.setOccupation(request.getOccupation());
+        data.setPermAddress1(request.getEmpAddress1());
+        data.setPermAddress2(request.getPermAddress2());
+        data.setPermCountry(request.getPermCountry());
+        data.setPermVillage(request.getPermVillage());
+        data.setPlaceOfBirth(request.getPlaceOfBirth());
+        data.setRelatedParty(request.getRelatedParty());
+        data.setRelatedPartyName(request.getRelatedPartyName());
+        data.setRelationshipType(request.getRelationshipType());
+        data.setResidence(request.getResidence());
         data.setSalutation(request.getSalutation());
-        data.setStatus("IN PROCESS");
-        customerDataRepository.save(data);
+
+        data.setSocialEconomicClass(request.getSocialEconomicClass());
+        data.setSpouseName(request.getSpouseName());
+        data.setSsnNumber(request.getSsnNumber());
+        data.setSurname(request.getSurname());
+        data.setVisionOUC(request.getVisionOUC());
+        data.setVisionSBU(request.getVisionSBU());
+        data.setWorkTelephone(request.getWorkTelephone());
+        data.setApprovalStatus("PENDING");//PENDING, APPROVED, REJECTED
+
+        return data;
 
     }
 
     public List<CustomerBaseDataDTO> getCustomers() {
         List<CustomerData> data = customerDataRepository.findAll();
+        ModelMapper modelMapper = new ModelMapper();
+        return data.stream()
+                .map(user -> modelMapper.map(user, CustomerBaseDataDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    public List<CustomerBaseDataDTO> getApprovalPendingCustomers() {
+        //PENDING, APPROVED, REJECTED
+        List<CustomerData> data = customerDataRepository.findApprovalPendingCustomers("PENDING");
         ModelMapper modelMapper = new ModelMapper();
         return data.stream()
                 .map(user -> modelMapper.map(user, CustomerBaseDataDTO.class))
@@ -99,18 +166,18 @@ public class CustomerService {
         return (uniqueId + String.valueOf(rand));
     }
 
-    public CustomerDataResponse searchCustomer(int id){
+    public CustomerDataResponse searchCustomer(int id) throws Exception {
         CustomerData data =  customerDataRepository.findById(id).get();
         return createCustomerDataResponse(data);
      }
 
-    public CustomerDataResponse findByByCustomerId(String customerId) {
+    public CustomerDataResponse findByByCustomerId(String customerId) throws Exception {
         LOG.info("Customer ID: {}",customerId);
         CustomerData data =  customerDataRepository.findByCustomerId(customerId);
         return createCustomerDataResponse(data);
     }
 
-    private CustomerDataResponse createCustomerDataResponse(CustomerData data) {
+    private CustomerDataResponse createCustomerDataResponse(CustomerData data) throws Exception{
 
         if (null == data){
             throw new RuntimeException("No Data Found");
@@ -187,12 +254,45 @@ public class CustomerService {
         res.setLegalStatus(data.getLegalStatus());
         res.setCustomerStatus(data.getCustomerStatus());
         res.setDateLastModified(data.getDateLastModified());
-        res.setStatus(data.getStatus());
+        res.setApprovalStatus(data.getApprovalStatus());
+        res.setComments(data.getComments());
 
         return res;
     }
 
-    public CustomerDataResponse getCustomerDetails(Map<String, String> request) {
+    public CustomerDataResponse getCustomerDetails(Map<String, String> request) throws Exception {
         return findByByCustomerId(request.get("customerId"));
+    }
+
+    public void updateCustomerStatus(UpdateStatusRequest request) throws Exception {
+        CustomerData data = null ;
+        if (null != request.getCustomerId()){
+            data = customerDataRepository.findByCustomerId(request.getCustomerId());
+        } else if (0 != request.getId()){
+            data = Optional.of(customerDataRepository.findById(request.getId())).get().orElse(null);
+        }
+
+        if (null != data){
+            data.setApprovalStatus(request.getStatus());
+            data.setComments(request.getComments());
+            customerDataRepository.save(data);
+        }else{
+            throw new RuntimeException("Unable to update status. Please try again.");
+        }
+
+    }
+
+    public void updateCustomerData(CustomerDataRequest request) throws Exception{
+
+        CustomerData data = null ;
+        if (null != request.getCustomerId()){
+            data = customerDataRepository.findByCustomerId(request.getCustomerId());
+        }
+
+        if(null != data){
+            customerDataRepository.save(createCustomer(request, data));
+        }else{
+            throw new RuntimeException("Failed to Update Customer details.");
+        }
     }
 }

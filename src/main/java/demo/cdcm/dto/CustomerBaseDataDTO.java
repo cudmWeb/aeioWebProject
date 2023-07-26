@@ -1,5 +1,7 @@
 package demo.cdcm.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -19,8 +21,12 @@ public class CustomerBaseDataDTO {
     @JsonProperty("lastName")
     private String surname;
 
-    private String status;
+    @JsonProperty("status")
+    private String approvalStatus;
 
     @JsonProperty("lastUpdateAt")
     private String updatedAt;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String comments;
 }

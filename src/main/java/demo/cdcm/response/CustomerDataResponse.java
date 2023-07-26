@@ -80,5 +80,6 @@ public class CustomerDataResponse {
     private Long customerStatus;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/YYYY")
     private Date dateLastModified;
-    private String status;
+    private String approvalStatus;
+    private String comments;
 }

@@ -167,15 +167,15 @@ public class CustomerData {
     @Column(name = "COMMENTS")
     private String comments;
 
-    @Column(name = "STATUS")
-    private String status;
+    @Column(name = "APPROVAL_STATUS")
+    private String approvalStatus;
 
-    public String getStatus() {
-        return status;
+    public String getApprovalStatus() {
+        return approvalStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setApprovalStatus(String approvalStatus) {
+        this.approvalStatus = approvalStatus;
     }
 
     public int getId() {
