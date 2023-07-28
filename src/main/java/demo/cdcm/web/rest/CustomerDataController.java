@@ -36,6 +36,7 @@ public class CustomerDataController {
         try{
             customerService.createCustomerData(request);
         }catch (Exception ex){
+            LOG.error("Exception while creating Customer: ", ex);
             Map<String, String> response = new HashMap<>();
             response.put("status", "FAILED");
             response.put("message", ex.getMessage());

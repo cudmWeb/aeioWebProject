@@ -1,6 +1,7 @@
 package demo.cdcm.service;
 
 import demo.cdcm.dto.CustomerBaseDataDTO;
+import demo.cdcm.helper.DateHelper;
 import demo.cdcm.model.CustomerData;
 import demo.cdcm.repository.CustomerDataRepository;
 import demo.cdcm.request.CustomerDataRequest;
@@ -13,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.security.SecureRandom;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -35,6 +38,9 @@ public class CustomerService {
     @Value("${customer.id.fetch}")
     private String uniqueId;
 
+    @Autowired
+    private DateHelper dateHelper;
+
     public void createCustomerData(CustomerDataRequest request) throws Exception{
         LOG.info("Enter createCustomerData");
         CustomerData data = new CustomerData();
@@ -48,10 +54,11 @@ public class CustomerService {
         return mm;
     }
 
-    public CustomerData createCustomer(CustomerDataRequest request, CustomerData data) {
+    public CustomerData createCustomer(CustomerDataRequest request, CustomerData data) throws ParseException {
 
         data.setAccountMandateIdNumber(request.getAccountMandateIdNumber());
-        data.setAccountMandateIdType(request.getAccountMandateIdType());
+        data.setAccountMandateIdType(request.getAccountMandateIdType().isBlank() ?
+                null : Long.valueOf(request.getAccountMandateIdType()));
         data.setAccountMandateName(request.getAccountMandateName());
         data.setAccountOfficer(request.getAccountOfficer());
 
@@ -67,15 +74,16 @@ public class CustomerService {
         data.setCustomerAcronym(request.getCustomerAcronym());
         data.setCustomerGender(request.getCustomerGender());
         data.setCustomerName(request.getCustomerName());
-        data.setCustomerOpenDate(request.getCustomerOpenDate());
-        data.setCustomerStatus(request.getCustomerStatus());
+        data.setCustomerOpenDate(dateHelper.getDateFromString(request.getCustomerOpenDate()));
+        data.setCustomerStatus(request.getCustomerStatus().isBlank()
+                ? null : Long.valueOf(request.getCustomerStatus()));
         data.setCustomerTIN(request.getCustomerTIN());
 
-        data.setDateLastModified(request.getDateLastModified());
-        data.setDateOfBirth(request.getDateOfBirth());
+        data.setDateLastModified(dateHelper.getDateFromString(request.getDateLastModified()));
+        data.setDateOfBirth(dateHelper.getDOBFromString(request.getDateOfBirth()));
 
         data.setEconomicSubSectorCodeISIC(request.getEconomicSubSectorCodeISIC());
-        data.setEducation(request.getEducation());
+        data.setEducation(request.getEducation().isBlank() ? null : Long.valueOf(request.getEducation()));
         data.setEmailId(request.getEmailId());
         data.setEmpAddress1(request.getEmpAddress1());
         data.setEmpAddress2(request.getEmpAddress2());
@@ -91,24 +99,26 @@ public class CustomerService {
         data.setGroupNumber(request.getGroupNumber());
         data.setHealthInsuranceNumber(request.getHealthInsuranceNumber());
         data.setHomeTelephone(request.getHomeTelephone());
-        data.setIncome(request.getIncome());
+        data.setIncome(request.getIncome().isBlank() ? null : Long.valueOf(request.getIncome()));
         data.setIncomeFrequency(request.getIncomeFrequency());
         data.setInternetBankingSubscription(request.getInternetBankingSubscription());
-        data.setLegalStatus(request.getLegalStatus());
+        data.setLegalStatus(request.getLegalStatus().isBlank() ? null: Long.valueOf(request.getLegalStatus()));
         data.setLocalGovtMember(request.getLocalGovtMember());
         data.setMaritalStatus(request.getMaritalStatus());
         data.setMobileBankingSubscription(request.getMobileBankingSubscription());
-        data.setNAICSCode(request.getNaicsCode());
+        data.setNAICSCode(request.getNaicsCode().isBlank() ? null : Long.valueOf(request.getNaicsCode()));
         data.setNationalIDNumber(request.getNationalIDNumber());
-        data.setNationalIDType(request.getNationalIDType());
+        data.setNationalIDType(request.getNationalIDType().isBlank()
+                ? null : Long.valueOf(request.getNationalIDType()));
         data.setNationality(request.getNationality());
         data.setNextOfKinEmailId(request.getNextOfKinEmailId());
         data.setNextOfKinIdNumber(request.getNextOfKinIdNumber());
-        data.setNextOfKinIdType(request.getNextOfKinIDType());
+        data.setNextOfKinIdType(request.getNextOfKinIDType().isBlank()
+                ? null : Long.valueOf(request.getNextOfKinIDType()));
         data.setNextOfKinName(request.getNextOfKinName());
         data.setNextOfKinTelephone(request.getNextOfKinTelephone());
         data.setNumberOfDependants(request.getNumberOfDependants());
-        data.setOccupation(request.getOccupation());
+        data.setOccupation(request.getOccupation().isBlank() ? null : Long.valueOf(request.getOccupation()));
         data.setPermAddress1(request.getEmpAddress1());
         data.setPermAddress2(request.getPermAddress2());
         data.setPermCountry(request.getPermCountry());
@@ -116,11 +126,13 @@ public class CustomerService {
         data.setPlaceOfBirth(request.getPlaceOfBirth());
         data.setRelatedParty(request.getRelatedParty());
         data.setRelatedPartyName(request.getRelatedPartyName());
-        data.setRelationshipType(request.getRelationshipType());
+        data.setRelationshipType(request.getRelationshipType().isBlank()
+                ? null : Long.valueOf(request.getRelationshipType()));
         data.setResidence(request.getResidence());
         data.setSalutation(request.getSalutation());
 
-        data.setSocialEconomicClass(request.getSocialEconomicClass());
+        data.setSocialEconomicClass(request.getSocialEconomicClass().isBlank()
+                ? null : Long.valueOf(request.getSocialEconomicClass()));
         data.setSpouseName(request.getSpouseName());
         data.setSsnNumber(request.getSsnNumber());
         data.setSurname(request.getSurname());
