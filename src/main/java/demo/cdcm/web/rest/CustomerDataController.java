@@ -33,17 +33,18 @@ public class CustomerDataController {
     @PostMapping(value = "/create")
     public ResponseEntity<?> createCustomer(@RequestBody CustomerDataRequest request) throws Exception {
         LOG.info("Enter createCustomer");
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "Success");
         try{
             customerService.createCustomerData(request);
         }catch (Exception ex){
             LOG.error("Exception while creating Customer: ", ex);
-            Map<String, String> response = new HashMap<>();
             response.put("status", "FAILED");
             response.put("message", ex.getMessage());
             return ResponseEntity.unprocessableEntity().body(response);
         }
         LOG.info("Record created");
-        return ResponseEntity.ok().body("Successfully created customer");
+        return ResponseEntity.ok().body(response);
     }
 
     @PostMapping(value = "/update")
